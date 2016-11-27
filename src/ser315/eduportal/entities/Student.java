@@ -37,15 +37,14 @@ private List<Course> enrolledCourses;
 	}
 	
 	public Course getCourse(int index){
+		if(index > enrolledCourses.size() || index < 0){
+			return null;
+		}
 		return enrolledCourses.get(index);
 	}
 	
 	public String toString(){
-		StringBuilder coursesListString = new StringBuilder();
-		for(Course course : enrolledCourses){
-			coursesListString.append("\n" + course);
-		}
-		return super.toString() + "\nEnrolled Courses:" + coursesListString; 
+		return super.toString() + ", Enrolled Courses: " + enrolledCourses; 
 	}
 
 }

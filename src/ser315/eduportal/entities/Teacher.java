@@ -36,14 +36,13 @@ public class Teacher extends User{
 	}
 	
 	public Course getCourse(int index){
+		if(index > coursesTaught.size() || index < 0){
+			return null;
+		}
 		return coursesTaught.get(index);
 	}
 	
 	public String toString(){
-		StringBuilder coursesListString = new StringBuilder();
-		for(Course course : coursesTaught){
-			coursesListString.append("\n" + course);
-		}
-		return super.toString() + "\nCourses Taught:" + coursesListString; 
+		return super.toString() + ", Courses Taught: " + coursesTaught; 
 	}
 }

@@ -8,7 +8,7 @@ public class Course {
 	private BigInteger id;
 	private List<Video> courseVideos;
 	private String courseName;
-	
+
 	
 	public Course(BigInteger id, String courseName) {
 		this.id = id;
@@ -41,16 +41,26 @@ public class Course {
 		this.courseName = courseName;
 	}
 
+	/**
+	 * @param video the video to add to the course video list
+	 */
+	public void addVideo(Video video){
+		courseVideos.add(video);
+	}
+	
+	public Video getVideo(int index){
+		if(index > courseVideos.size() || index < 0){
+			return null;
+		}
+		return courseVideos.get(index);
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		StringBuilder videosListString = new StringBuilder();
-		for(Video video : courseVideos){
-			videosListString.append("\n" + video);
-		}
-		return "ID " + id + " Course name: " + courseName + "\nCourse Videos: " + courseVideos;
+		return "ID " + id + ", Course name: " + courseName + ", Course Videos: " + courseVideos;
 	}
 	
 	

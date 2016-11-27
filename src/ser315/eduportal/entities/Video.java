@@ -2,16 +2,16 @@ package ser315.eduportal.entities;
 
 import java.math.BigInteger;
 
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 public class Video {
 	
 	private BigInteger id;
 	private String videoPath;
 	private Teacher uploader;
-	private DateTime uploadDate;
+	private LocalDateTime uploadDate;
 	
-	public Video(BigInteger id, String videoPath, Teacher uploader, DateTime uploadDate) {
+	public Video(BigInteger id, String videoPath, Teacher uploader, LocalDateTime uploadDate) {
 		this.id = id;
 		this.videoPath = videoPath;
 		this.uploader = uploader;
@@ -66,14 +66,14 @@ public class Video {
 	/**
 	 * @return the uploadDate
 	 */
-	public DateTime getUploadDate() {
+	public LocalDateTime getUploadDate() {
 		return uploadDate;
 	}
 
 	/**
 	 * @param uploadDate the uploadDate to set
 	 */
-	public void setUploadDate(DateTime uploadDate) {
+	public void setUploadDate(LocalDateTime uploadDate) {
 		this.uploadDate = uploadDate;
 	}
 	

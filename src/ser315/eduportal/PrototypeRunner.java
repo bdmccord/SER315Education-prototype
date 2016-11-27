@@ -1,11 +1,6 @@
 package ser315.eduportal;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.Scanner;
-
-import org.apache.commons.io.FileUtils;
 
 import ser315.eduportal.entities.User;
 

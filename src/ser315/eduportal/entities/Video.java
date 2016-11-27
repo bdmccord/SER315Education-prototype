@@ -1,6 +1,5 @@
 package ser315.eduportal.entities;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
 import org.joda.time.DateTime;

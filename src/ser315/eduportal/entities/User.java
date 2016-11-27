@@ -1,7 +1,6 @@
 package ser315.eduportal.entities;
 
 import java.math.BigInteger;
-import java.util.List;
 
 public abstract class User {
 	private BigInteger id;

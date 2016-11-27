@@ -1,9 +1,11 @@
 package ser315.eduportal;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
 
 import org.joda.time.DateTime;
 
@@ -36,10 +38,12 @@ public class PrototypeRunner {
 		users = new LinkedList<User>();
 		User studentActor = new Student(getNextUserId(), "Joe", "Bob", "joebob@gmail.com");
 		User teacherActor = new Teacher(getNextUserId(), "Marie", "Antoinette", "maryann@gmail.com");
-		Course courseOne = new Course(getNextCourseId(), "C++ Basics");
+		Course courseOne = new Course(getNextCourseId(), "Java 101");
 		Teacher teacher = (Teacher)teacherActor;
 		teacher.addCourse(courseOne);
-		Video videoOne = new Video(getNextVideoId(),"videos/videoOne.mp4", DateTime.now());
+		Student student = (Student)studentActor;
+		student.addCourse(courseOne);
+		Video videoOne = new Video(getNextVideoId(),"Strings I", "videos/strings_i.mp4", DateTime.now());
 		courseOne.addVideo(videoOne);
 		users.add(studentActor);
 		users.add(teacherActor);
@@ -89,6 +93,23 @@ public class PrototypeRunner {
 	public void displayStudentInterface(){
 		Student currentStudent = (Student) currentUser;
 		System.out.println("------User Interface------");
+		String response = promptUser("Choose an option:\n(1) View Courses List\n(2) Watch a Video\n(logout) To Logout\nOption: ");
+		if(checkForLogout(response)){
+			logout();
+		}
+		else if(response.equalsIgnoreCase("1")){
+			System.out.println("------Courses That You Are Enrolled In------");
+			for(Course course : currentStudent.getEnrolledCourses()){
+				System.out.println(course);
+				displayStudentInterface();
+			}
+		}
+		else if(response.equalsIgnoreCase("2")){
+			displayWatchVideoInterface();
+		}
+		else{
+			displayTeacherInterface();
+		}
 	}
 	
 	public void displayTeacherInterface(){
@@ -114,33 +135,103 @@ public class PrototypeRunner {
 	}
 	
 	private void displayAddVideoInterface(){
-		Teacher currentTeacher = (Teacher) currentUser;
-		Course courseToAddTo = null;
-		String videoPath = "";
-		while(courseToAddTo == null){
-			StringBuilder sb = new StringBuilder("Choose a course:\n");
-			int currentOption = 1;
-			for(Course course : currentTeacher.getCoursesTaught()){
-				sb.append("(" + currentOption + ") " + course.getCourseName() + "\n");
-			}
-			sb.append("Option: ");
-			String response = promptUser(sb.toString());
-			try{
-				int index = Integer.parseInt(response) - 1;
-				courseToAddTo = currentTeacher.getCourse(index);
-				if(courseToAddTo == null){
-					System.out.println("Not a valid option.");
-				}
-			}catch(NumberFormatException ex){
-				System.out.println("Please enter a number.");
-			}
+		Teacher currentTeacher = (Teacher) currentUser;;
+		if(currentTeacher.getCoursesTaught().size() == 0){
+			System.out.println("You do not teach any courses");
 		}
-		videoPath = promptUser("Please enter the path to the video: ");
-		Video videoToAdd = new Video(getNextVideoId(), videoPath, DateTime.now());
-		courseToAddTo.addVideo(videoToAdd);
-		System.out.println("Successfully added " + videoToAdd);
+		else{
+			Course courseToAddTo = null;
+			while(courseToAddTo == null){
+				StringBuilder sb = new StringBuilder("Choose a course:\n");
+				int currentOption = 1;
+				for(Course course : currentTeacher.getCoursesTaught()){
+					sb.append("(" + currentOption + ") " + course.getCourseName() + "\n");
+					currentOption++;
+				}
+				sb.append("Option: ");
+				String response = promptUser(sb.toString());
+				try{
+					int index = Integer.parseInt(response) - 1;
+					courseToAddTo = currentTeacher.getCourse(index);
+					if(courseToAddTo == null){
+						System.out.println("Not a valid option.");
+					}
+				}catch(NumberFormatException ex){
+					System.out.println("Please enter a number.");
+				}
+			}
+			String videoPath = promptUser("Please enter the path to the video: ");
+			String videoName = promptUser("Please enter video name: ");
+			Video videoToAdd = new Video(getNextVideoId(), videoName, videoPath, DateTime.now());
+			courseToAddTo.addVideo(videoToAdd);
+			System.out.println("Successfully added " + videoToAdd);
+		}
 		displayTeacherInterface();
 		
+	}
+	
+	private void displayWatchVideoInterface(){
+		Student currentStudent = (Student) currentUser;
+		if(currentStudent.getEnrolledCourses().size() == 0){
+			System.out.println("You are not enrolled in any courses");
+		}
+		else{
+			Course selectedCourse = null;
+			while(selectedCourse == null){
+				StringBuilder sb = new StringBuilder("Choose a course:\n");
+				int currentOption = 1;
+				for(Course course : currentStudent.getEnrolledCourses()){
+					sb.append("(" + currentOption + ") " + course.getCourseName() + "\n");
+					currentOption++;
+				}
+				sb.append("Option: ");
+				String response = promptUser(sb.toString());
+				try{
+					int index = Integer.parseInt(response) - 1;
+					selectedCourse = currentStudent.getCourse(index);
+					if(selectedCourse == null){
+						System.out.println("Not a valid option.");
+					}
+				}catch(NumberFormatException ex){
+					System.out.println("Please enter a number.");
+				}
+			}
+			if(selectedCourse.getCourseVideos().size() == 0){
+				System.out.println("This course has no videos.");
+			}
+			else{
+				Video selectedVideo = null;
+				while(selectedVideo == null){
+					StringBuilder sb = new StringBuilder("Choose a video:\n");
+					int currentOption = 1;
+					for(Video video : selectedCourse.getCourseVideos()){
+						sb.append("(" + currentOption + ") " + video.getVideoName() + "\n");
+						currentOption++;
+					}
+					sb.append("Option: ");
+					String response = promptUser(sb.toString());
+					try{
+						int index = Integer.parseInt(response) - 1;
+						selectedVideo = selectedCourse.getVideo(index);
+						if(selectedVideo == null){
+							System.out.println("Not a valid option.");
+						}
+					}catch(NumberFormatException ex){
+						System.out.println("Please enter a number.");
+					}
+				}
+				System.out.println("Watching: " + selectedVideo.getVideoName());
+				System.out.println("link: " + getVideoURI(selectedVideo));
+			}
+		}
+		displayStudentInterface();
+	}
+	
+	// This is a placeholder, since we cannot actually serve the video files, we just give the local path in the form of a uri
+	private String getVideoURI(Video video){
+		String path = video.getVideoPath();
+		File videoFile = new File(path);
+		return "file:///" + videoFile.getAbsolutePath().replaceAll(Matcher.quoteReplacement(File.separator), "/");
 	}
 	
 	private String promptUser(String message){

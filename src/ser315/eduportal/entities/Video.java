@@ -9,9 +9,11 @@ public class Video {
 	private BigInteger id;
 	private String videoPath;
 	private DateTime uploadDate;
+	private String videoName;
 	
-	public Video(BigInteger id, String videoPath, DateTime uploadDate) {
+	public Video(BigInteger id, String videoName, String videoPath, DateTime uploadDate) {
 		this.id = id;
+		this.videoName = videoName;
 		this.videoPath = videoPath;
 		this.uploadDate = uploadDate;
 	}
@@ -30,6 +32,23 @@ public class Video {
 	 */
 	public void setId(BigInteger id) {
 		this.id = id;
+	}
+
+
+	
+	/**
+	 * @return the videoName
+	 */
+	public String getVideoName() {
+		return videoName;
+	}
+
+
+	/**
+	 * @param videoName the videoName to set
+	 */
+	public void setVideoName(String videoName) {
+		this.videoName = videoName;
 	}
 
 
@@ -63,6 +82,6 @@ public class Video {
 	}
 	
 	public String toString(){
-		return "ID " + id + ", Video Path : " + videoPath + ", Upload Date: " + uploadDate; 
+		return "ID " + id + ", Video Name: " + videoName + " Video Path : " + videoPath + ", Upload Date: " + uploadDate; 
 	}
 }

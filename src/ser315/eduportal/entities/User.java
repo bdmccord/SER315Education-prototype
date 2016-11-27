@@ -54,6 +54,10 @@ public abstract class User {
 		this.emailAddress = emailAddress;
 	}
 
+	public String getFullName(){
+		return firstName + " " + lastName;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

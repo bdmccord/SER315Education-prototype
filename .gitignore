@@ -1,0 +1,9 @@
+bin/**
+target/**
+.classpath
+.project
+*.class
+*.jar
+.settings/
+.loadpath
+.metadata

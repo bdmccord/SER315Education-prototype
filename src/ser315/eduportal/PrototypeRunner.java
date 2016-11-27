@@ -92,7 +92,7 @@ public class PrototypeRunner {
 	
 	public void displayStudentInterface(){
 		Student currentStudent = (Student) currentUser;
-		System.out.println("------User Interface------");
+		System.out.println("------Student Interface------");
 		String response = promptUser("Choose an option:\n(1) View Courses List\n(2) Watch a Video\n(logout) To Logout\nOption: ");
 		if(checkForLogout(response)){
 			logout();
